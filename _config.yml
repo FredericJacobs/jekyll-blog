@@ -2,6 +2,7 @@
 title: BrainOverfl0w
 baseurl: "/blog"
 url: "https://www.fredericjacobs.com"
+twitter_username: "FredericJacobs"
 
 # Build settings
 markdown: kramdown
