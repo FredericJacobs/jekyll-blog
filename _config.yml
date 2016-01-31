@@ -1,8 +1,11 @@
 # Site settings
 title: BrainOverfl0w
+description: Frederic Jacobs' Personal Blog
 baseurl: "/blog"
+email: me@fredericjacobs.com
 url: "https://www.fredericjacobs.com"
 twitter_username: "FredericJacobs"
+github_username:  FredericJacobs
 
 # Build settings
 markdown: kramdown
