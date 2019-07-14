@@ -1,10 +1,10 @@
 ---
 layout: post
-title:  "Axolotl & the Quantum Computers"
+title:  "Double Ratchet & the Quantum Computers"
 date:   2016-04-07 15:00:00 +0200
 ---
 
-*The Axolotl protocol [was renamed](https://whispersystems.org/blog/signal-inside-and-out/) “Double Ratchet”.*
+*The double ratchet [was previously known](https://whispersystems.org/blog/signal-inside-and-out/) as the Axolotl ratchet.*
 
 With recent developments in quantum information processing and computation, there has been a lot of chatter about moving to post-quantum cryptography. The [NSA](/blog/2016/01/27/NSA-QC/) and NIST have already called for the standardization of post-quantum crypto and its swift adoption.
 
@@ -26,11 +26,11 @@ Other factors such as significantly longer [key sizes](https://en.wikipedia.org/
 
 <br>
 
-Some mobile messaging apps are experimenting with post-quantum primitives such as [PQChat](https://post-quantum.com/pqchat) that is using McEliece for message encryption. While McEliece is a nice primitive, the PQChat message encryption protocol has not been independently studied and documented. End-to-end encryption protocols such as OTR or Axolotl use ephemeral keys extensively to provide strong perfect forward secrecy. 8Mb public keys are making it hard to engineer any kind of protocol with similar forward secrecy features that would work well on mobile, knowing that Axolotl sends a new ephemeral DH key with every message.
+Some mobile messaging apps are experimenting with post-quantum primitives such as [PQChat](https://post-quantum.com/pqchat) that is using McEliece for message encryption. While McEliece is a nice primitive, the PQChat message encryption protocol has not been independently studied and documented. End-to-end encryption protocols such as OTR or the double ratchet use ephemeral keys extensively to provide strong perfect forward secrecy. 8Mb public keys are making it hard to engineer any kind of protocol with similar forward secrecy features that would work well on mobile, knowing that the double ratchet sends a new ephemeral DH key with every message.
 
-This led me to think about what protection Axolotl actually provides against an adversary who can use a quantum computer to break Axolotl's DH primitive.
+This led me to think about what protection the double ratchet actually provides against an adversary who can use a quantum computer to break the ratchet's DH primitive.
 
-If you're not familiar with Axolotl, the Open Whisper Systems blog has [a very good post ](https://whispersystems.org/blog/advanced-ratcheting/) about it. Axolotl combines two kinds of ratchets (hence why it was recently renamed *"Double Ratchet"*), namely a Diffie-Hellman ratchet and a hash-iterated one.
+If you're not familiar with the double ratchet, the Open Whisper Systems blog has [a very good post](https://whispersystems.org/blog/advanced-ratcheting/) about it. As its name suggests, it combines two kinds of ratchets, namely a Diffie-Hellman ratchet and a hash-iterated one.
 
 The ratchet is initialized with a `RootKey` that is derived from a key exchange, in the case of Signal or WhatsApp, that is the [3DH key exchange](https://whispersystems.org/blog/simplifying-otr-deniability/).
 
@@ -55,7 +55,7 @@ MK-2 ----+      |       |
 
 An important fact is that each new `RootKey` is derived through a PRF from a previous `RootKey` and the output of DH key agreement. The fact that it is derived, not only from a DH agreement, but also from a previous value is a valuable mitigation when we think about the threat posed by quantum computers. If the PRF used for the derivation is secure, then even if the adversary can break the ephemeral DH part, he won't be able to recover the new `RootKey` without the previous one.
 
-A consequence of that design, is that an adversary has to **record every single message since the session initialization or he loses his capability to decrypt any subsequent messages** for future messages, even if he can continue to break the ephemeral DH. If the adversary didn't intercept the initialization of the Axolotl session, would not be able to decrypt any subsequent messages.
+A consequence of that design, is that an adversary has to **record every single message since the session initialization or he loses his capability to decrypt any subsequent messages** for future messages, even if he can continue to break the ephemeral DH. If the adversary didn't intercept the 3DH key agreement, he would not be able to decrypt any subsequent messages.
 
 That's a really cool property of the protocol. ZRTP has similar property if [key continuity](http://zfoneproject.com/faq.html#keycontinuity) is implemented (not the case in Signal) but most other protocols (MTProto, SSH, Threema ...) do not have that feature.
 
